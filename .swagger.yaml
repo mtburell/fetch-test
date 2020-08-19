@@ -1,0 +1,42 @@
+swagger: '2.0'
+info:
+  version: "1.0.0"
+  title: Fetch Rewards Homework
+  description: Email address parser homework assignment
+host: 'localhost'
+basePath: '/'
+consumes:
+  - application/json
+produces:
+  - application/json
+
+paths:
+  /email-checker:
+    post:
+      description: Returns a count of unique destination email addresses, following the gmail address filter rules. 
+      parameters:
+        - in: body
+          schema:
+            type: 
+            properties:
+              emails:
+                description: An array of email addresses to parse
+                type: array
+                required: true
+                example: ["test.email@gmail.com", "test.email+spam@gmail.com", "testemail@gmail.com"]
+      responses:
+        '200': 
+          description: 200 OK with response
+          schema:
+            $ref: "#/definitions/Response"
+definitions:
+  Response:
+    type: object
+    example:
+      {
+        "unique_email_addresses": 1
+      }
+    properties:
+      unique_email_addresses:
+        type: int
+        description: A list of the unique email destination addresses
