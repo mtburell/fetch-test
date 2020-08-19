@@ -18,11 +18,13 @@ This project includes a webserver written in Go. For more information about inst
 #### To Run: 
 Pull this project, navigate to the root directory, and run 
 ```
+go get ./...
 go run cmd/main.go
 ```
 
 #### To Build: 
 Pull this project, navigate to the root directory, and run
 ```
+go get ./...
 go build cmd/main.go
 ```
