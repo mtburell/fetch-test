@@ -1,6 +1,10 @@
 package emailchecker
 
 import (
+	"bytes"
+	"fmt"
+	"net/http"
+	"net/http/httptest"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -38,4 +42,26 @@ func TestValidateTargets(t *testing.T) {
 
 	validateTargets(emails, targets)
 	assert.Equal(t, 1, len(targets), "should be equal")
+}
+
+func TestHealthcheck(t *testing.T) {
+	recorder := httptest.NewRecorder()
+
+	var data = []byte(fmt.Sprintf(`{
+		"emails": ["test@gmail.com"]
+  }`))
+	req, _ := http.NewRequest("POST", "/email-checker", bytes.NewBuffer(data))
+	EmailCheckerHandler(recorder, req)
+	assert.Equal(t, http.StatusOK, recorder.Code, "Should be 200")
+}
+
+func TestHealthcheckBadRequest(t *testing.T) {
+	recorder := httptest.NewRecorder()
+
+	var data = []byte(fmt.Sprintf(`{
+		"emails": ["test@gmail.com]
+  }`))
+	req, _ := http.NewRequest("POST", "/email-checker", bytes.NewBuffer(data))
+	EmailCheckerHandler(recorder, req)
+	assert.Equal(t, http.StatusBadRequest, recorder.Code, "Should be 400")
 }
